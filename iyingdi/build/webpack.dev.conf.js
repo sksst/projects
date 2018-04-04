@@ -11,6 +11,7 @@ const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
 
 const axios = require('axios')
+const bodyParser = require('body-parser')
 
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
@@ -25,28 +26,23 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   // these devServer options should be customized in /config/index.js
   devServer: {
     before(app) {
-      app.get('/api/home/page', function (req, res) {
-        const url = 'https://m.mi.com/v1/home/page'
-        axios({
-          method: 'post',
-          url: url,
+      app.use(bodyParser.urlencoded({extended: true}))
+      const querystring = require('querystring')
+
+      app.get('/feed/list/seed/v2', function(req, res) {
+        const url = 'https://www.iyingdi.cn/feed/list/seed/v2'
+        axios.get(url, {
           headers: {
-            origin: 'https://m.mi.com',
-            referer: 'https://m.mi.com/'
+            host: 'www.iyingdi.cn'
           },
-          data: {
-            client_id: 180100031051,
-            channel_id: 17489.0001,
-            webp: 1,
-            page_type: 'tab',
-            page_id: 1864
-          }
-        }).then(response => {
+          params: req.query
+        }).then((response) => {
           res.json(response.data)
-        }).catch(e => {
+        }).catch((e) => {
           console.log(e)
         })
       })
+
     },
     clientLogLevel: 'warning',
     historyApiFallback: {
