@@ -28,7 +28,7 @@ var config = {
     entry: {
         'common'            : ['./src/page/common/index.js'],
         'index'             : ['./src/page/index/index.js'],
-        // 'list'              : ['./src/page/list/index.js'],
+        'list'              : ['./src/page/list/index.js'],
         // 'detail'            : ['./src/page/detail/index.js'],
         // 'cart'              : ['./src/page/cart/index.js'],
         // 'order-confirm'     : ['./src/page/order-confirm/index.js'],
