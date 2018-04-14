@@ -1,7 +1,10 @@
 <template>
   <div id="app" height="100%">
     <x-header slot="header" style="width:100%;position:absolute;left:0;top:0;z-index:100;">2333</x-header>
-    <view-box ref="viewBox" body-padding-top="46px" body-padding-bottom="55px">
+    <view-box ref="viewBox" body-padding-top="46px"
+              body-padding-bottom="55px"
+              id="viewBox"
+              >
       <transition name="vux-pop-in">
         <router-view class="router-view"></router-view>
       </transition>
@@ -21,6 +24,7 @@
 
 <script>
 import { XHeader, ViewBox, Tabbar, TabbarItem } from 'vux'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'app',
   components: {
@@ -28,6 +32,45 @@ export default {
     ViewBox,
     Tabbar,
     TabbarItem
+  },
+  computed: {
+    ...mapState({
+      route: state => state.route,
+      path: state => state.route.path
+    })
+  },
+  mounted() {
+    this.handler = () => {
+      if (this.path === '/top-news') {
+        this.box = document.querySelector('.top-news')
+        console.log(this.box.scrollTop)
+        this.updateDemoPosition(this.box.scrollTop)
+      }
+    }
+  },
+  beforeDestroy () {
+    this.box && this.box.removeEventListener('scroll', this.handler, false)
+  },
+  methods: {
+    ...mapActions([
+      'updateDemoPosition'
+    ])
+  },
+  watch: {
+    path (path) {
+      if (path === '/top-news') {
+        setTimeout(() => {
+          this.box = document.querySelector('.top-news')
+          if (this.box) {
+            console.log(this.box)
+            this.box.removeEventListener('scroll', this.handler, false)
+            this.box.addEventListener('scroll', this.handler, false)
+          }
+        }, 1000)
+      } else {
+        this.box && this.box.removeEventListener('scroll', this.handler, false)
+      }
+    }
   }
 }
 </script>

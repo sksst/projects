@@ -1,8 +1,14 @@
 <template>
   <div class="top-news">
-    <tab :line-width=2 active-color='#f85959' v-model="index">
+    <div class="cube-scroll-wrapper">
+          <div class="tab">
+      <div class="tab-item" v-for="(item, idx) in list2" :key="item" :class="{active: index === idx}" @click="selectedTab(idx)">{{item}}</div>
+    </div>
+    </div>
+    <cube-loading :size="28" v-show="loading" class="loading"></cube-loading>
+    <!-- <tab :line-width=2 active-color='#f85959' v-model="index">
       <tab-item class="vux-center" :selected="demo2 === item" v-for="(item, index) in list2" @click="demo2 = item" :key="index">{{item}}</tab-item>
-    </tab>
+    </tab> -->
     <content v-if="!!news">
       <section class="swiper-content" v-for="newsItem in news" :key="newsItem.uniquekey">
         <a :href="newsItem.url" class="list-wrapper">
@@ -28,9 +34,7 @@
 </template>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem } from 'vux'
 import axios from 'axios'
-import { mapState } from 'vuex'
 
 export default {
   data() {
@@ -38,25 +42,16 @@ export default {
       index: 0,
       demo2: '头条',
       list2: ['头条', '社会', '国内', '国际', '娱乐', '体育', '军事', '科技', '财经', '时尚'],
-      news: []
+      news: [],
+      loading: false
     }
   },
   created() {
-    this._getTopNews()
-  },
-  mounted() {
-    console.log(this.demoTop)
-  },
-  computed: {
-    ...mapState({
-      demoTop: state => state.demoScrollTop
-    })
+    // this._getTopNews()
   },
   methods: {
     async _getTopNews(type = 'top') {
-      this.$vux.loading.show({
-        text: '正在加载'
-      })
+      this.loading = true
       const res = await axios.get('/api/toutiao', {
         params: {
           type: type
@@ -65,7 +60,10 @@ export default {
       if (!res.data.error_code) {
         this.news = res.data.result.data
       }
-      this.$vux.loading.hide()
+      this.loading = false
+    },
+    selectedTab(idx) {
+      this.index = idx
     }
   },
   watch: {
@@ -105,51 +103,58 @@ export default {
           return date.getFullYear()+"/"+(date.getMonth()+1)+"/"+date.getDate();
       }
     }
-  },
-  components: {
-    Tab,
-    TabItem,
-    Swiper,
-    SwiperItem
   }
 }
 </script>
 
 
-<style lang="less" scoped>
-.top-news {
-  .swiper-content {
+<style lang="stylus" scoped>
+.top-news
+  .cube-scroll-wrapper
+    height: 46px;
+    width: 100%;
+    overflow: scroll;
+    background: #f4f5f6;
+    &::-webkit-scrollbar
+      display:none;
+    .tab
+      height: 36px;
+      width: 500px;
+      font-size: 17px;
+      .tab-item
+        height: 26px;
+        line-height 26px;
+        margin: 10px;
+        width: 50px;
+        float: left;
+        text-align center;
+      .active
+        color: #f85959;
+  .loading
+    width: 28px
+    margin: 10px auto;
+  .swiper-content
     margin: 0 15px;
     padding: 15px 0;
     border-bottom: 1px solid rgba(221, 221, 221, 0.6);
-    &:last-child {
+    &:last-child
       border-bottom: none;
-    }
-    .list-wrapper {
-      .title {
+    .list-wrapper
+      .title
         font-size: 17px;
         line-height: 21px;
         color: #222222;
-      }
-      .list-image {
+      .list-image
         margin-top: 6px;
         display: flex;
-        div {
+        div
           width: 33.33%;
-          &:nth-child(2) {
+          &:nth-child(2)
             margin-left: 2px;
             margin-right: 2px;
-          }
-          img {
+          img
             width: 100%;
-          }
-        }
-      }
-      .desc {
+      .desc
         font-size: 10px;
         color: #999999;
-      }
-    }
-  }
-}
 </style>

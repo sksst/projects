@@ -1,0 +1,3 @@
+export const SET_SINGER = 'SET_SINGER'
+
+export const UPDATE_DEMO_POSITION = 'UPDATE_DEMO_POSITION'
