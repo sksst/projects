@@ -7,6 +7,12 @@ import CookCategory from '@/components/Cook/CookCategory'
 import CookList from '@/components/Cook/CookList'
 import CookDetail from '@/components/Cook/CookDetail'
 import CookSearch from '@/components/Cook/CookSearch'
+import Iqa from '@/components/Iqa/Iqa'
+import Joke from '@/components/Joke/Joke'
+import JokeText from '@/components/Joke/JokeText'
+import JokePic from '@/components/Joke/JokePic'
+import JokeGif from '@/components/Joke/JokeGif'
+
 Vue.use(Router)
 
 export default new Router({
@@ -45,6 +51,34 @@ export default new Router({
       path: '/cook-search',
       name: 'CookSearch',
       component: CookSearch
+    },
+    {
+      path: '/iqa',
+      name: 'Iqa',
+      component: Iqa
+    },
+    {
+      path: '/joke',
+      name: 'Joke',
+      component: Joke,
+      children: [
+        {
+          path: '',
+          component: JokeText
+        },
+        {
+          path: 'text',
+          component: JokeText
+        },
+        {
+          path: 'pic',
+          component: JokePic
+        },
+        {
+          path: 'gif',
+          component: JokeGif
+        }
+      ]
     }
   ]
 })

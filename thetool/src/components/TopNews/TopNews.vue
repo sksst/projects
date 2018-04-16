@@ -47,7 +47,7 @@ export default {
     }
   },
   created() {
-    // this._getTopNews()
+    this._getTopNews()
   },
   methods: {
     async _getTopNews(type = 'top') {

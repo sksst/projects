@@ -16,7 +16,7 @@
         <ul>
           <li class="list-item" v-for="(item, index) in category" :key="item.parentId" v-show="selected ===  index">
             <ul class="food-wrapper">
-              <li class="food-item" v-for="food in item.list" :key="food.id"><a @click.prevent="goList(food.id)">{{food.name}}</a></li>
+              <li class="food-item" v-for="food in item.list" :key="food.id"><a @click.prevent="goList(food.id, food.name)">{{food.name}}</a></li>
             </ul>
           </li>
         </ul>
@@ -45,14 +45,13 @@ export default {
       const res = await axios.get('/api/cook/category')
       if (res && res.data.error_code === 0) {
         this.category = res.data.result
-        console.log(res.data.result)
       }
     },
     selectItem(index) {
       this.selected = index
     },
-    goList(id) {
-      this.$router.push({path: '/cook-list', query: { id: id }})
+    goList(id, name) {
+      this.$router.push({path: '/cook-list', query: { id: id, name: name }})
     },
     goSearch() {
       this.$router.push({path: '/cook-search'})

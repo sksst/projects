@@ -1,18 +1,20 @@
 <template>
   <div class="cook-list">
     <div class="list-wrapper" v-if="!!list">
-      <ul>
-        <li class="list-item" v-for="item in list" :key="item.id" @click="goDetail(item.id)">
-          <div class="albums">
-            <img :src="item.albums[0]" alt="菜谱">
-          </div>
-          <div class="desc">
-            <h3 class="title">{{item.title}}</h3>
-            <span class="ingredients">原料： {{item.ingredients}}</span>
-            <span class="tags">{{item.tags}}</span>
-          </div>
-        </li>
-      </ul>
+      <cube-scroll :data="list" :options="options" @pulling-up="onPullingUp"  ref="scroll">
+        <ul>
+          <li class="list-item" v-for="(item, index) in list" :key="index" @click="goDetail(item.id, item.title)">
+            <div class="albums">
+              <img :src="item.albums[0]" alt="菜谱">
+            </div>
+            <div class="desc">
+              <h3 class="title">{{item.title}}</h3>
+              <span class="ingredients">原料： {{item.ingredients}}</span>
+              <span class="tags">{{item.tags}}</span>
+            </div>
+          </li>
+        </ul>
+      </cube-scroll>
     </div>
   </div>
 </template>
@@ -20,9 +22,20 @@
 <script>
 import axios from 'axios'
 export default {
+  name: 'CookList',
   data() {
     return {
-      list: []
+      list: [],
+      pageNumber: 1,
+      options: {
+        pullUpLoad: {
+          threshold: 0,
+          txt: {
+            more: 'Load more',
+            noMore: 'No more data'
+          }
+        }
+      }
     }
   },
   created() {
@@ -46,12 +59,21 @@ export default {
         }
       })
       if (result && result.data.error_code === 0) {
-        this.list = result.data.result.data
-        console.log(result.data.result)
+        const totalNum = parseInt(result.data.result.totalNum, 10)
+        if (pn * rn < totalNum) {
+          const list = result.data.result.data
+          this.list = this.list.concat(list)
+        } else {
+          this.$refs.scroll.forceUpdate()
+        }
       }
     },
-    goDetail(id) {
-      this.$router.push({path: '/cook-detail', query: { id: id }})
+    onPullingUp() {
+      const id = this.$route.query.id
+      this._getCookByIndex(id, ++this.pageNumber)
+    },
+    goDetail(id, name) {
+      this.$router.push({path: '/cook-detail', query: { id: id, name: name }})
     }
   }
 }
@@ -59,9 +81,13 @@ export default {
 
 <style lang="stylus" scoped>
 .cook-list
+  height: 100%;
   width: 100%;
   .list-wrapper
     width: 100%;
+    height: 100%;
+    .cube-scroll-wrapper
+      height: 100%;
     .list-item
       width: 100%;
       display: flex;

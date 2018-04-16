@@ -2,9 +2,11 @@
   <div id="app">
     <header class="cube-bar">
       <z-icon type="icon-back" size="24" class="icon" color="#fc9153" @click.native="back"/>
-      <h1>{{title}}</h1>
+      <h3 class="title">{{title}}</h3>
     </header>
-    <router-view class="router-view"/>
+    <keep-alive :include="['CookSearch', 'Iqa']">
+      <router-view class="router-view"/>
+    </keep-alive>
   </div>
 </template>
 
@@ -20,7 +22,8 @@ export default {
   },
   computed: {
     ...mapState({
-      path: state => state.route.path
+      path: state => state.route.path,
+      query: state => state.route.query
     }),
     title() {
       if (this.path === '/top-news') {
@@ -31,6 +34,15 @@ export default {
       }
       if (this.path === '/cook-category') {
         return '菜谱大全'
+      }
+      if (this.path === '/cook-list') {
+        return this.query.name
+      }
+      if (this.path === '/cook-detail') {
+        return this.query.name
+      }
+      if (this.path === '/iqa') {
+        return '智能问答'
       }
       return ''
     }
@@ -56,13 +68,14 @@ html, body
     text-align: center;
     background-color: #edf0f4;
     box-shadow: 0 2px 1px #e9eaea;
-    -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     .icon
       position: absolute;
       left: 4px;
       top: 50%;
       transform: translateY(-50%);
+    .title
+      font-size: 18px;
   .router-view
     position: absolute;
     top: 44px;

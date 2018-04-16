@@ -92,6 +92,62 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           console.log(e)
         })
       })
+
+      // 智能回复接口
+      app.get('/api/iqa/query', function(req, res) {
+        axios.get('http://jisuznwd.market.alicloudapi.com/iqa/query',{
+          headers: {
+            Authorization: 'APPCODE 11680bbc54c5445c9c89caa7cccf445f'
+          },
+          params: Object.assign({}, req.query)
+        }).then((response) => {
+          res.json(response.data)
+        }).catch((e) => {
+          console.log(e)
+        })
+      })
+
+      // 图片笑话
+      app.get('/api/joke/picJoke', function(req, res) {
+        axios.get('http://ali-joke.showapi.com/picJoke',{
+          headers: {
+            Authorization: 'APPCODE 11680bbc54c5445c9c89caa7cccf445f'
+          },
+          params: Object.assign({}, req.query)
+        }).then((response) => {
+          res.json(response.data)
+        }).catch((e) => {
+          console.log(e)
+        })
+      })
+
+      // 文本笑话
+      app.get('/api/joke/textJoke', function(req, res) {
+        axios.get('http://ali-joke.showapi.com/textJoke',{
+          headers: {
+            Authorization: 'APPCODE 11680bbc54c5445c9c89caa7cccf445f'
+          },
+          params: Object.assign({}, req.query)
+        }).then((response) => {
+          res.json(response.data)
+        }).catch((e) => {
+          console.log(e)
+        })
+      })
+
+      // 动态图笑话
+      app.get('/api/joke/gifJoke', function(req, res) {
+        axios.get('http://ali-joke.showapi.com/gifJoke',{
+          headers: {
+            Authorization: 'APPCODE 11680bbc54c5445c9c89caa7cccf445f'
+          },
+          params: Object.assign({}, req.query)
+        }).then((response) => {
+          res.json(response.data)
+        }).catch((e) => {
+          console.log(e)
+        })
+      })
     },
     clientLogLevel: 'warning',
     historyApiFallback: true,

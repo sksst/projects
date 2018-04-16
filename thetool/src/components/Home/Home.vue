@@ -14,6 +14,20 @@
         <span>菜谱大全</span>
       </div>
     </div>
+    <div class="flex">
+      <div class="flex-item" @click="goIqa">
+        <z-icon type="icon-jiqiren" size="36"/>
+        <span>智能问答</span>
+      </div>
+      <div class="flex-item" @click="goJoke">
+        <z-icon type="icon--smile-" size="36"/>
+        <span>笑话大全</span>
+      </div>
+      <div class="flex-item" @click="goIqa">
+        <z-icon type="icon-jiqiren" size="36"/>
+        <span>智能问答</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -29,6 +43,12 @@ export default {
     },
     goCook() {
       this.$router.push({ path: '/cook-category' })
+    },
+    goIqa() {
+      this.$router.push({ path: '/iqa' })
+    },
+    goJoke() {
+      this.$router.push({ path: '/joke' })
     }
   },
   components: {

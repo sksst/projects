@@ -72,7 +72,7 @@ export default {
     width: 100%;
     height: 60px;
     margin-top: -4px;
-    background: #fff4d6;
+    background: #ffffff;
     .name
       font-size: 24px;
       color: #000000;
