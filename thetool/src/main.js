@@ -34,6 +34,8 @@ import {
 } from 'cube-ui'
 import App from './App'
 import router from './router'
+import store from './store'
+import { sync } from 'vuex-router-sync'
 
 Vue.use(Button)
 Vue.use(CheckboxGroup)
@@ -58,12 +60,15 @@ Vue.use(IndexList)
 Vue.use(Swipe)
 Vue.use(Upload)
 
+sync(store, router)
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  store,
   template: '<App/>',
   components: { App }
 })

@@ -1,7 +1,12 @@
 <template>
-  <div class="weixin" ref="list" id="weixin">
-    <group v-if="!!list">
-      <cell-box v-for="item in list" :key="item.id">
+  <div class="weixin" id="weixin">
+    <cube-scroll
+      ref="scroll"
+      :data="list"
+      :options="options"
+      @pulling-up="onPullingUp"
+      @pulling-down="onPullingDown">
+      <div v-for="item in list" :key="item.id">
         <a class="article-container" :href="item.url">
           <div class="img-wrapper">
             <img :src="item.firstImg" alt="" width="100px">
@@ -14,32 +19,39 @@
             </div>
           </div>
         </a>
-      </cell-box>
-    </group>
+      </div>
+    </cube-scroll>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-import { Group, CellBox } from 'vux'
 export default {
   data() {
     return {
-      list: []
+      list: [],
+      pageNumber: 1,
+      options: {
+        pullDownRefresh: {
+          threshold: 90,
+          stop: 40,
+          txt: '加载成功'
+        },
+        pullUpLoad: {
+          threshold: 0,
+          txt: {
+            more: '加载更多',
+            noMore: '没有更多数据'
+          }
+        }
+      }
     }
   },
   created() {
     this._getSelectedWeixin()
   },
-  mounted() {
-    const list = this.$refs.list
-    console.log(list.scrollTop)
-  },
   methods: {
     async _getSelectedWeixin(pageNumber = 1, pageSize = 20) {
-      this.$vux.loading.show({
-        text: '正在加载'
-      })
       const res = await axios.get('/api/weixin', {
         params: {
           pno: pageNumber,
@@ -47,24 +59,27 @@ export default {
         }
       })
       if (!res.data.error_code) {
-        this.list = res.data.result.list
+        this.list = this.list.concat(res.data.result.list)
+        // this.list.push([...res.data.result.list])
       }
-      this.$vux.loading.hide()
     },
-    listenScroll() {
-      console.log(233)
+    onPullingDown() {
+      this._getSelectedWeixin(++this.pageNumber)
+    },
+    onPullingUp() {
+      this._getSelectedWeixin(++this.pageNumber)
     }
-  },
-  components: {
-    CellBox,
-    Group
   }
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="stylus" scoped>
 .weixin {
+  margin: 10px;
   .article-container {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #cccccc;
     width: 100%;
     display: flex;
     .img-wrapper {
@@ -80,6 +95,7 @@ export default {
         font-size: 14px;
       }
       .source {
+        line-height: 24px;
         font-size: 12px;
         color: #999999;
       }

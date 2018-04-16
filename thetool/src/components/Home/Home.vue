@@ -9,7 +9,9 @@
         <z-icon type="icon-weixin" size="36"/>
         <span>微信精选</span>
       </div>
-      <div class="flex-item">
+      <div class="flex-item" @click="goCook">
+        <z-icon type="icon-Food-Icons-" size="36"/>
+        <span>菜谱大全</span>
       </div>
     </div>
   </div>
@@ -24,6 +26,9 @@ export default {
     },
     goWeixin () {
       this.$router.push({ path: '/weixin' })
+    },
+    goCook() {
+      this.$router.push({ path: '/cook-category' })
     }
   },
   components: {

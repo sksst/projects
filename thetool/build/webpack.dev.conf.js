@@ -48,6 +48,50 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           console.log(e)
         })
       })
+
+      // 菜谱大全
+      app.get('/api/cook/query', function(req, res) {
+        axios.get('http://apis.juhe.cn/cook/query.php',{
+          params: Object.assign({key: 'a35f4f97f6b1338940846515bc689e1a'}, req.query)
+        }).then((response) => {
+          res.json(response.data)
+        }).catch((e) => {
+          console.log(e)
+        })
+      })
+
+      // 菜谱分类标签
+      app.get('/api/cook/category', function(req, res) {
+        axios.get('http://apis.juhe.cn/cook/category',{
+          params: Object.assign({key: 'a35f4f97f6b1338940846515bc689e1a'}, req.query)
+        }).then((response) => {
+          res.json(response.data)
+        }).catch((e) => {
+          console.log(e)
+        })
+      })
+
+      // 按标签检索菜谱
+      app.get('/api/cook/index', function(req, res) {
+        axios.get('http://apis.juhe.cn/cook/index',{
+          params: Object.assign({key: 'a35f4f97f6b1338940846515bc689e1a'}, req.query)
+        }).then((response) => {
+          res.json(response.data)
+        }).catch((e) => {
+          console.log(e)
+        })
+      })
+
+      // 按菜谱ID查看详细
+      app.get('/api/cook/queryid', function(req, res) {
+        axios.get('http://apis.juhe.cn/cook/queryid',{
+          params: Object.assign({key: 'a35f4f97f6b1338940846515bc689e1a'}, req.query)
+        }).then((response) => {
+          res.json(response.data)
+        }).catch((e) => {
+          console.log(e)
+        })
+      })
     },
     clientLogLevel: 'warning',
     historyApiFallback: true,
